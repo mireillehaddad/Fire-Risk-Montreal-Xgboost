@@ -5,7 +5,7 @@
 1. [Purpose](#purpose)
 
 2. [Data Cleaning and Merging Pipeline](#data-cleaning-and-merging-pipeline)  
-   2.1 [Description: evaluation_fonciere](#evaluation_fonciere)
+   2.1 [evaluation_fonciere](#evaluation_fonciere)
     - [Description](#-description)
     - [How to Run](#-how-to-run)
     - [Output](#-output)
