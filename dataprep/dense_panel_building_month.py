@@ -56,22 +56,14 @@ gdf = gpd.GeoDataFrame(df, geometry="geometry", crs="EPSG:4326").to_crs("EPSG:32
 
 
 
-df.columns.tolist()
-
-
-
-
-
-
-
 
 # # 🔹 Create dense panel: all buildings × all months
 
-# In[6]:
 
 
 unique_buildings = gdf[["ID_UEV", "LATITUDE", "LONGITUDE"]].drop_duplicates()
 all_months = pd.period_range(start=gdf["month"].min(), end=gdf["month"].max(), freq="M")
+print(f"Expanding dataset into a panel of building x month ...")
 panel = pd.MultiIndex.from_product(
     [unique_buildings["ID_UEV"].unique(), all_months],
     names=["ID_UEV", "month"]
@@ -82,24 +74,24 @@ panel = panel.merge(unique_buildings, on="ID_UEV", how="left")
 
 
 
-# 🔹 Label fire presence
-fires = gdf[gdf["fire"] == True][["ID_UEV", "month"]].drop_duplicates()
-fires["HAS_FIRE_THIS_MONTH"] = 1
-panel = panel.merge(fires, on=["ID_UEV", "month"], how="left")
-panel["HAS_FIRE_THIS_MONTH"] = panel["HAS_FIRE_THIS_MONTH"].fillna(0).astype(int)
+# # 🔹 Label fire presence
+# fires = gdf[gdf["fire"] == True][["ID_UEV", "month"]].drop_duplicates()
+# fires["HAS_FIRE_THIS_MONTH"] = 1
+# panel = panel.merge(fires, on=["ID_UEV", "month"], how="left")
+# panel["HAS_FIRE_THIS_MONTH"] = panel["HAS_FIRE_THIS_MONTH"].fillna(0).astype(int)
+
+
+
+# print("Adding time features ...")
+# # 🔹 Add time features
+# panel["month_num"] = panel["month"].dt.month
+# panel["year"] = panel["month"].dt.year
 
 
 
 
-# 🔹 Add time features
-panel["month_num"] = panel["month"].dt.month
-panel["year"] = panel["month"].dt.year
 
-
-
-
-
-panel.shape
+print(f"Base Panel shape: {panel.shape}")
 
 
 
@@ -119,18 +111,16 @@ static_cols = [
     "FIRE_RATE_ZONE_NORM", "FIRE_COUNT_LAST_YEAR_ZONE_NORM"
 ]
 
+print("Merging static building features ...")
 # Drop duplicates so each building has one row of static info
 static_features = gdf[static_cols].drop_duplicates(subset=["ID_UEV"])
 
+# panel = panel.merge(static_features, on="ID_UEV", how="left")
+
+# print(f"Static features merged - panel shape:  {panel.shape}")
 
 
-
-panel = panel.merge(static_features, on="ID_UEV", how="left")
-
-
-
-
-print(panel.columns.tolist())
+# print(panel.columns.tolist())
 
 
 
@@ -147,7 +137,7 @@ print(panel.columns.tolist())
 
 
 
-
+print(f"Filtering static features with valid ID")
 valid_ids = gdf["ID_UEV"].unique()
 static_features = static_features[static_features["ID_UEV"].isin(valid_ids)]
 
@@ -170,6 +160,11 @@ panel = pd.MultiIndex.from_product(
 # Merge cleanly with static features
 panel = panel.merge(static_features, on="ID_UEV", how="left")
 
+print(f"static features merged  - shape= {panel.shape}")
+
+
+
+
 
 
 
@@ -188,13 +183,15 @@ panel = panel.merge(static_features, on="ID_UEV", how="left")
 
 
 
-# 🔸 1. Label fire presence
+# # 🔸 1. Label fire presence
+print("Labelling HAS_FIRE_THIS_MONTH")
 fires = gdf[gdf["fire"] == True][["ID_UEV", "month"]].drop_duplicates()
 fires["HAS_FIRE_THIS_MONTH"] = 1
 panel = panel.merge(fires, on=["ID_UEV", "month"], how="left")
 panel["HAS_FIRE_THIS_MONTH"] = panel["HAS_FIRE_THIS_MONTH"].fillna(0).astype(int)
 
 # 🔸 2. Create lag features
+print("Adding last month(s) fire presence ...")
 panel = panel.sort_values(by=["ID_UEV", "month"])
 panel["fire_last_1m"] = panel.groupby("ID_UEV")["HAS_FIRE_THIS_MONTH"].shift(1).fillna(0)
 panel["fire_last_2m"] = panel.groupby("ID_UEV")["HAS_FIRE_THIS_MONTH"].shift(2).fillna(0)
@@ -211,7 +208,6 @@ panel["fire_last_3m"] = panel.groupby("ID_UEV")["HAS_FIRE_THIS_MONTH"].shift(3).
 # 
 # (Optional) fire_rolling_12m: Fires in the last year.
 
-# In[15]:
 
 
 # ✅ Sort panel by ID_UEV and month (ascending)
@@ -219,7 +215,7 @@ panel = panel.sort_values(by=["ID_UEV", "month"]).reset_index(drop=True)
 
 
 
-
+print("adding cumulative fire columns ...")
 # 🔄 Sort before group-based ops
 panel = panel.sort_values(by=["ID_UEV", "month"])
 
@@ -276,6 +272,7 @@ panel["months_since_last_fire"] = (
 
 
 # 🔸 Add time-based features
+print("Adding time features month and year")
 panel["month_num"] = panel["month"].dt.month
 panel["year"] = panel["month"].dt.year
 
@@ -283,7 +280,8 @@ panel["year"] = panel["month"].dt.year
 # In[19]:
 
 
-panel.shape
+print(f"Final panel shape : {panel.shape}")
+print(panel.columns)
 
 
 
@@ -293,7 +291,7 @@ panel.shape
 panel.to_csv(OUTPUT_PANEL, index=False)
 print(f"✅ Panel saved to {OUTPUT_PANEL}")
 
-print("Saving to:", OUTPUT_PANEL.resolve())
+# print("Saving to:", OUTPUT_PANEL.resolve())
 
 
 
