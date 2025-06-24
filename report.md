@@ -35,18 +35,20 @@
     - [Save Final Dataset](#-step-7-save-final-dataset)
     - [Next Steps](#next-steps)
 
-3. [Models Tried](#models-tried)  
-   3.1 [RandomForestClassifier](#randomforestclassifier)
+3. [Model evaluation](#model-evaluation)
+
+4. [Models Tried](#models-tried)  
+   4.1 [RandomForestClassifier](#randomforestclassifier)
     - [Target Variable](#target-variable)
     - [Confusion Matrix](#confusion-matrix)
     - [Classification Report](#classification-report)
 
-   3.2 [LGBMClassifier](#lgbmclassifier)
+   4.2 [LGBMClassifier](#lgbmclassifier)
     - [Target Variable](#target-variable-1)
     - [Model Results (All Months)](#model-results-all-months)
     - [Model Results (Months 1–12 only)](#model-results-months-1–12-only)
 
-   3.3 [Xgboost](#xgboost)
+   4.3 [Xgboost](#xgboost)
     - [Script Location](#script-location)
     - [Data Pipeline](#data-pipeline)
     - [Feature Engineering](#feature-engineering)
@@ -58,7 +60,7 @@
     - [Binary vs Probabilistic Forecasting](#binary-vs-probabilistic-forecasting)
     - [Summary](#summary)
 
-4. [Forecasting and Visualization](#forecasting-and-visualization)
+5. [Forecasting and Visualization](#forecasting-and-visualization)
     - [Data Overview](#data-overview)
     - [Feature Engineering](#feature-engineering-1)
     - [Model Training](#model-training)
@@ -405,9 +407,15 @@ Consider borough-level aggregation or modeling using NO_ARROND_ILE_CUM
 
 
 
+# 3. Model evaluation
+- Priority is given to recall over precision as we'd rather capture more fire risk including a few false negatives than miss high risk buildings
+- Train set/Test set : we used a temporal split rather than random split
+Train = data before 2024
+Test = data of 2024-2025
 
+This is especially important because of the approximation of fire location due to data obfuscation to avoid leaking knowledge of fires into the train set.
 
-# 3. Models tried
+# 4. Models tried
 
 ### RandomForestClassifier
 (Located in file [EDA-incident-evaluation-fonciere.ipynb](EDA-incident-evaluation-fonciere.ipynb), for pipeline see [instructions](README.md/#how-to-run-the-data-pipeline))
@@ -613,7 +621,7 @@ XGBoost + panel-level fire features + lag history yields a decent early-warning 
 
 
 
-4. ## Forecasting and visualization
+5. ## Forecasting and visualization
 
 
 # 🔥 Monthly Fire Risk Forecasting with XGBoost – Project Summary
