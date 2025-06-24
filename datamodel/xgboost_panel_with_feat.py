@@ -23,7 +23,7 @@ print(f"Root folder:{ROOT}")
 
 # 🔹 Define input/output paths using ROOT
 INPUT_CSV = ROOT / "datasets" / "cleaned" / "building_month_fire_panel_feat_eng.csv"
-OUTPUT_CSV = ROOT / "datasets" / "results" / "xgboost_panel_with_feat_label_enc_pred.csv"
+OUTPUT_CSV = ROOT / "datamodel" / "xgboost_panel_with_feat_label_enc_pred.csv"
 ENCODER_FILE = ROOT / "datamodel" / "xgboost_panel_with_feat_label_enc.pkl"
 MODEL_FILE = ROOT / "datamodel" / "xgboost_panel_with_feat.pkl"
 

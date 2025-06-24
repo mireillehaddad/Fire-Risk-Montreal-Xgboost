@@ -13,7 +13,7 @@ from pathlib import Path
 import os
 
 # 🔧 Project root directory (2 levels up from current script)
-ROOT = Path.cwd().parents[1]
+ROOT = Path(__file__).parents[1]
 
 # 🔹 Define input/output paths using ROOT
 INPUT_CSV = ROOT / "datasets" / "cleaned" / "evaluation_fire_coordinates_date_feat_eng_2.csv"
