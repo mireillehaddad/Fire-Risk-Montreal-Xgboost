@@ -407,7 +407,7 @@ Consider borough-level aggregation or modeling using NO_ARROND_ILE_CUM
 
 
 
-# 3. Model evaluation
+# 3. Model evaluation {#model-evaluation}
 - Priority is given to recall over precision as we'd rather capture more fire risk including a few false negatives than miss high risk buildings
 - Train set/Test set : we used a temporal split rather than random split
 Train = data before 2024
