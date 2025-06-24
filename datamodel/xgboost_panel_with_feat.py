@@ -31,9 +31,10 @@ MODEL_FILE = ROOT / "datamodel" / "xgboost_panel_with_feat.pkl"
 print("[input exists?]", INPUT_CSV.exists(), "➜", INPUT_CSV)
 #print("[output dir exists?]", OUTPUT_PANEL.parent.exists(), "➜", OUTPUT_PANEL.parent)
 
-
+print_timestamped_message("Loading data ...")
 # 🔸 Load dataset
 df = pd.read_csv(INPUT_CSV,parse_dates=['month'])
+print_timestamped_message("Data loading complete.")
 
 
 # # 🔸 Load panel for modeling
