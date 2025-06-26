@@ -2,75 +2,68 @@
 
 ## Table of Contents
 
+## Table of Contents
+
 1. [Purpose](#purpose)
 
-2. [Data Cleaning and Merging Pipeline](#data-cleaning-and-merging-pipeline)  
-   2.1 [evaluation_fonciere](#evaluation_fonciere)
-    - [Description](#-description)
-    - [How to Run](#-how-to-run)
-    - [Output](#-output)
-    - [Summary of Code Workflow](#-summary-of-code-workflow)
-    - [Main Steps](#-main-steps)
-    - [Data Cleaning Summary](#-data-cleaning-summary)
-    - [Feature Engineering Summary](#-feature-engineering-summary)
-    - [Dropped/Excluded Columns](#-droppedexcluded-columns)
-    - [Final Output Columns](#-final-output-columns)
+2. [Data Cleaning and Merging Pipeline](#data-cleaning-and-merging-pipeline)
+   - [evaluation_fonciere](#evaluation_fonciere)
+      - [Description](#description)
+      - [How to Run](#how-to-run)
+      - [Output](#output)
+      - [Summary of Code Workflow](#summary-of-code-workflow)
+      - [Main Steps](#main-steps)
+      - [Data Cleaning Summary](#data-cleaning-summary)
+      - [Feature Engineering Summary](#feature-engineering-summary)
+      - [Dropped/Excluded Columns](#droppedexcluded-columns)
+      - [Final Output Columns](#final-output-columns)
+   - [main_evaluation_feat_eng.py](#description-main_evaluation_feat_engpy)
+      - [Goal of the Script](#goal-of-the-script)
+      - [Load Datasets](#1-load-datasets)
+      - [Preprocessing](#2-preprocessing)
+      - [Spatial Join](#3-spatial-join)
+      - [Merge Fire Info Back](#4-merge-fire-info-back)
+      - [Time Features](#5-time-features)
+      - [Fire Zone Aggregates](#6-fire-zone-aggregates)
+      - [Missing Coordinates](#7-missing-coordinates)
+      - [Feature Selection](#8-feature-selection)
+      - [Save Output](#9-save-output)
+      - [Summary Stats](#summary-stats)
+   - [dense_panel_building_month.py](#description--dense_panel_building_monthpy)
 
-   2.2 [Description: main_evaluation_feat_eng.py](#-detailed-summary-of-main_evaluation_feat_engpy)
-    - [Goal of the Script](#-goal-of-the-script)
-    - [Load Datasets](#-1-load-datasets)
-    - [Preprocessing](#-2-preprocessing)
-    - [Spatial Join](#-3-spatial-join)
-    - [Merge Fire Info Back](#-4-merge-fire-info-back)
-    - [Time Features](#-5-time-features)
-    - [Fire Zone Aggregates](#-6-fire-zone-aggregates)
-    - [Missing Coordinates](#-7-missing-coordinates)
-    - [Feature Selection](#-8-feature-selection)
-    - [Save Output](#-9-save-output)
-    - [Summary Stats](#-summary-stats)
+3. [Model Evaluation](#3-model-evaluation-criteria)
 
-   2.3 [Description: dense_panel_building_month.py](#-fire-risk-monthly-panel-construction--detailed-summary)
-    - [Input & Output](#input--output)
-    - [Workflow Steps](#workflow-steps)
-    - [Save Final Dataset](#-step-7-save-final-dataset)
-    - [Next Steps](#next-steps)
-
-3. [Model evaluation](#3-model-evaluation)
-
-4. [Models Tried](#models-tried)  
-   4.1 [RandomForestClassifier](#randomforestclassifier)
-    - [Target Variable](#target-variable)
-    - [Confusion Matrix](#confusion-matrix)
-    - [Classification Report](#classification-report)
-
-   4.2 [LGBMClassifier](#lgbmclassifier)
-    - [Target Variable](#target-variable-1)
-    - [Model Results (All Months)](#model-results-all-months)
-    - [Model Results (Months 1–12 only)](#model-results-months-1–12-only)
-
-   4.3 [Xgboost](#xgboost)
-    - [Script Location](#script-location)
-    - [Data Pipeline](#data-pipeline)
-    - [Feature Engineering](#feature-engineering)
-    - [Model](#model-xgboostclassifier)
-    - [Evaluation](#evaluation-default-threshold--05)
-    - [Threshold Optimization](#threshold-optimization)
-    - [Final Model Evaluation](#final-model-evaluation--threshold--055)
-    - [Recommendations](#recommendations)
-    - [Binary vs Probabilistic Forecasting](#binary-vs-probabilistic-forecasting)
-    - [Summary](#summary)
+4. [Models Tried](#4-models-tried)
+   - [RandomForestClassifier](#randomforestclassifier)
+      - [Target Variable](#target-variable)
+      - [Confusion Matrix](#confusion-matrix)
+      - [Classification Report](#classification-report)
+   - [LGBMClassifier](#lgbmclassifier)
+      - [Target Variable](#target-variable-1)
+      - [Model Results (All Months)](#model-results-all-months)
+      - [Model Results (Months 1–12 only)](#model-results-months-1–12-only)
+   - [XGBoost](#xgboost)
+      - [Script Location](#script-location)
+      - [Data Pipeline](#data-pipeline)
+      - [Feature Engineering](#feature-engineering)
+      - [Model](#model-xgboostclassifier)
+      - [Evaluation](#evaluation-default-threshold--05)
+      - [Threshold Optimization](#threshold-optimization)
+      - [Final Model Evaluation](#final-model-evaluation--threshold--055)
+      - [Recommendations](#recommendations)
+      - [Binary vs Probabilistic Forecasting](#binary-vs-probabilistic-forecasting)
+      - [Summary](#summary)
 
 5. [Forecasting and Visualization](#forecasting-and-visualization)
-    - [Data Overview](#data-overview)
-    - [Feature Engineering](#feature-engineering-1)
-    - [Model Training](#model-training)
-    - [Evaluation and Threshold Tuning](#evaluation-and-threshold-tuning)
-    - [Future Panel Forecasting](#future-panel-forecasting)
-    - [Visualization](#visualization)
-    - [Model Deployment Steps](#model-deployment-steps)
-    - [Recommendations](#recommendations-1)
-    - [Output Files](#output-files)
-
+   - [Data Overview](#data-overview)
+   - [Feature Engineering](#feature-engineering-1)
+   - [Model Training](#model-training)
+   - [Evaluation and Threshold Tuning](#evaluation-and-threshold-tuning)
+   - [Future Panel Forecasting](#future-panel-forecasting)
+   - [Visualization](#visualization)
+   - [Model Deployment Steps](#model-deployment-steps)
+   - [Recommendations](#recommendations-1)
+   - [Output Files](#output-files)
 
 
 
@@ -89,10 +82,10 @@ Objective: The objective of this project is to predict high fire risk areas by m
 
 ## evaluation_fonciere
 
-### 📄 Description
+### Description
 This script processes the [Montréal property evaluation dataset](https://donnees.montreal.ca/dataset/unites-evaluation-fonciere), cleans it, and applies basic feature engineering to prepare it for downstream fire risk modeling.
 
-### 🚀 How to Run
+### How to Run
 ```bash
 python ./dataprep/evaluation_fonciere.py
 ```
@@ -130,7 +123,7 @@ This script performs:
 
 ---
 
-### 🧹 Data Cleaning Summary
+###  Data Cleaning Summary
 
 | Column                | Cleaning Strategy                                                                 |
 |-----------------------|-----------------------------------------------------------------------------------|
@@ -151,7 +144,7 @@ This script performs:
 | `HAS_MULTIPLE_LOGEMENTS` | 1 if more than 1 housing unit, 0 otherwise                      |
 | `FIRE_FREQUENCY_ZONE`    | Number of buildings in the same `NO_ARROND_ILE_CUM` as proxy for risk |
 
-> 🔄 All continuous variables are normalized using `MinMaxScaler`.
+> All continuous variables are normalized using `MinMaxScaler`.
 
 ---
 
@@ -179,13 +172,13 @@ This script performs:
 
 ## Description: main_evaluation_feat_eng.py
 
-### 🔥 Detailed Summary of `main_evaluation_feat_eng.py`
+### Detailed Summary of `main_evaluation_feat_eng.py`
 
 This script processes building and fire incident data to produce a geospatially enriched dataset for **fire risk modeling**. It includes spatial joins, temporal feature extraction, and fire frequency calculations at the zone level.
 
 ---
 
-#### 🧠 Goal of the Script
+#### Goal of the Script
 
 Produce a feature-rich dataset at the building level that combines:
 
@@ -198,7 +191,7 @@ Produce a feature-rich dataset at the building level that combines:
 
 ---
 
-##### 🗂️ 1. Load Datasets
+##### 1. Load Datasets
 
 - `eval_cleaned_feat_eng.csv` — Pre-cleaned building/property data
 - `adresses.csv` — Street-level address coordinates
@@ -208,28 +201,28 @@ All file paths are dynamically resolved.
 
 ---
 
-### 🧹 2. Preprocessing
+### 2. Preprocessing
 
-#### 🔸 Evaluation Data
+#### Evaluation Data
 - Cleans `CIVIQUE_DEBUT` (street number) and standardizes street names
 - Copies original version for later merging
 
-#### 🔸 Address Data
+#### Address Data
 - Combines `GENERIQUE` + `SPECIFIQUE` into `NOM_RUE_CLEAN`
 - Converts address numbers for matching
 
-#### 🔸 Coordinate Assignment
+#### Coordinate Assignment
 - Merges buildings and addresses to assign `LATITUDE` and `LONGITUDE`
 - Filters out rows without coordinates
 
-#### 🔸 Incident Data
+#### Incident Data
 - Filters rows where `DESCRIPTION_GROUPE` contains "INCENDIE"
 - Converts date/time and builds GeoDataFrame
 - Buffers incidents with a 100m radius to capture nearby buildings
 
 ---
 
-### 🗺️ 3. Spatial Join
+### 3. Spatial Join
 
 - Matches each building to nearby fire incidents using `gpd.sjoin()`
 - Assigns:
@@ -240,7 +233,7 @@ All file paths are dynamically resolved.
 
 ---
 
-### 🔁 4. Merge Fire Info Back
+### 4. Merge Fire Info Back
 
 - Merges fire records with **all buildings** using `ID_UEV`
 - Fills nulls for non-fire rows
@@ -248,7 +241,7 @@ All file paths are dynamically resolved.
 
 ---
 
-### 🕒 5. Time Features
+### 5. Time Features
 
 - Extracts:
   - `fire_month`, `fire_year`, `year_month`
@@ -256,7 +249,7 @@ All file paths are dynamically resolved.
 
 ---
 
-### 🌍 6. Fire Zone Aggregates
+### 6. Fire Zone Aggregates
 
 - Computes per-zone fire counts for year 2024
 - Computes:
@@ -266,30 +259,30 @@ All file paths are dynamically resolved.
 
 ---
 
-### 🔎 7. Missing Coordinates
+### 7. Missing Coordinates
 
 - Flags rows missing latitude/longitude: `missing_coords`
 - Compares fire rates between missing vs present coordinates
 
 ---
 
-### 🎯 8. Feature Selection
+### 8. Feature Selection
 
-#### ✅ Kept Features
+#### Kept Features
 - Structural: `AGE_BATIMENT`, `DENSITE_LOGEMENT`, `RATIO_SURFACE`
 - Target: `fire`, `had_fire`, `fire_date`
 - Time: `fire_month`, `fire_year`, `fire_season`, `year_month`
 - Spatial: `NO_ARROND_ILE_CUM`, `LATITUDE`, `LONGITUDE`
 - Fire Stats: `FIRE_COUNT_LAST_YEAR_ZONE`, `FIRE_RATE_ZONE`, and normalized versions
 
-#### ❌ Dropped Features
+#### Dropped Features
 - Redundant address fields: `CIVIQUE_DEBUT`, `ADDR_DE`, etc.
 - Internal metadata: `MATRICULE83`, `CASERNE`, etc.
 - Raw year field: `ANNEE_CONSTRUCTION` (keep `AGE_BATIMENT` instead)
 
 ---
 
-### 💾 9. Save Output
+### 9. Save Output
 
 - Final cleaned file is saved to:
   ```
@@ -309,7 +302,7 @@ All file paths are dynamically resolved.
 
 ## Description : dense_panel_building_month.py
 
-# 🔍 Fire Risk Monthly Panel Construction — Detailed Summary
+# Fire Risk Monthly Panel Construction — Detailed Summary
 
 This document explains the Python script that constructs a monthly panel dataset of buildings in Montréal enriched with fire event labels and engineered features. The final output is a panel of building-month combinations, used for predictive modeling of fire incidents.
 
@@ -407,7 +400,7 @@ Consider borough-level aggregation or modeling using NO_ARROND_ILE_CUM
 
 
 
-# 3. Model evaluation
+# 3. Model evaluation criteria
 - Priority is given to recall over precision as we'd rather capture more fire risk including a few false negatives than miss high risk buildings
 - Train set/Test set : we used a temporal split rather than random split
 Train = data before 2024
@@ -500,23 +493,23 @@ I then tried to train only on months 1-12:
 # Rewriting the markdown file after environment reset
 
 markdown_content = """
-# 🔥 Monthly Fire Risk Prediction Using XGBoost
+# Monthly Fire Risk Prediction Using XGBoost
 
-## 📁 Script Location
+## Script Location
 `/dataprep/time_model_Xgboost.ipynb`
 
 This script trains and evaluates a binary classifier to predict whether a fire will occur in a specific building in a given month. It utilizes a **dense panel dataset** with rich building-level and temporal-spatial features.
 
 ---
 
-## 🔢 Data Pipeline
+## Data Pipeline
 - **Input file:** `building_month_fire_panel_feat_eng.csv`
 - **Granularity:** Monthly panel of all buildings
 - **Target Variable:** `HAS_FIRE_THIS_MONTH` (0 or 1)
 
 ---
 
-## 🔧 Feature Engineering
+## Feature Engineering
 
 ### Structural & Geographic Features:
 - `MUNICIPALITE`, `ETAGE_HORS_SOL`, `NOMBRE_LOGEMENT`, `AGE_BATIMENT`
@@ -535,7 +528,7 @@ This script trains and evaluates a binary classifier to predict whether a fire w
 
 ---
 
-## 🚀 Model: XGBoostClassifier
+## Model: XGBoostClassifier
 - Handles class imbalance with `scale_pos_weight`
 - Supports categorical variables with `enable_categorical=True`
 - Optimized with:
@@ -544,7 +537,7 @@ This script trains and evaluates a binary classifier to predict whether a fire w
 
 ---
 
-## 🔹 Evaluation (Default Threshold = 0.5)
+## Evaluation (Default Threshold = 0.5)
 | Class | Precision | Recall | F1-score | Support |
 |-------|-----------|--------|----------|---------|
 | No Fire (0) | 0.9903 | 0.7436 | 0.8494 | 3,674,405 |
@@ -558,7 +551,7 @@ This script trains and evaluates a binary classifier to predict whether a fire w
 
 ---
 
-## ⚖️ Threshold Optimization
+## Threshold Optimization
 Evaluated thresholds: `0.2` → `0.55`
 - Best **F2 Score** (recall-focused): **0.55**
 
@@ -569,7 +562,7 @@ Evaluated thresholds: `0.2` → `0.55`
 
 ---
 
-## 🔬 Final Model Evaluation @ Threshold = 0.55
+## Final Model Evaluation @ Threshold = 0.55
 | Class | Precision | Recall | F1-score | Support |
 |-------|-----------|--------|----------|---------|
 | No Fire | 0.9896 | 0.8081 | 0.8897 | 3,674,405 |
@@ -585,7 +578,7 @@ Evaluated thresholds: `0.2` → `0.55`
 
 ---
 
-## 📌 Recommendations
+## Recommendations
 - ✅ **Use threshold = 0.50–0.55** depending on recall vs precision preference
 - ⚠️ **Precision is low**, so interpret predictions as risk levels
 - 🔎 **Use predicted probabilities** for prioritizing inspections
@@ -606,7 +599,7 @@ Evaluated thresholds: `0.2` → `0.55`
 
 ---
 
-## 🚀 Next Steps
+## Next Steps
 - Deploy as a **ranking tool** not a strict classifier
 - Create dashboards that visualize monthly fire risk scores by building
 - Use **precision@K** and **F2-score** as main evaluation metrics
@@ -624,13 +617,13 @@ XGBoost + panel-level fire features + lag history yields a decent early-warning 
 5. ## Forecasting and visualization
 
 
-# 🔥 Monthly Fire Risk Forecasting with XGBoost – Project Summary
+# Monthly Fire Risk Forecasting with XGBoost – Project Summary
 
 This script implements a full end-to-end pipeline for monthly fire risk prediction in Montréal using historical building data, engineered features, and an XGBoost classifier. It includes model training, threshold tuning, forecasting future risk, and generating interactive heatmaps for visual interpretation.
 
 ---
 
-## 📁 Data Overview
+## Data Overview
 
 ### Input Files
 - `building_month_fire_panel_feat_eng.csv`: Monthly panel of building features and historical fire labels.
@@ -641,7 +634,7 @@ This script implements a full end-to-end pipeline for monthly fire risk predicti
 
 ---
 
-## 🧪 Feature Engineering
+## Feature Engineering
 
 ### Lag Features
 - `fire_last_1m`, `fire_last_2m`, `fire_last_3m`: Fires in previous months per building.
@@ -652,7 +645,7 @@ This script implements a full end-to-end pipeline for monthly fire risk predicti
 
 ---
 
-## 🧠 Model Training
+## Model Training
 
 ### Model: `XGBClassifier`
 - Handles class imbalance using `scale_pos_weight`.
@@ -675,7 +668,7 @@ This script implements a full end-to-end pipeline for monthly fire risk predicti
 
 ---
 
-## 🔮 Future Panel Forecasting
+## Future Panel Forecasting
 
 - Generated fire risk predictions for the next **6 months** (panel built using unique buildings × future months).
 - Static features frozen from latest available data.
@@ -683,7 +676,7 @@ This script implements a full end-to-end pipeline for monthly fire risk predicti
 
 ---
 
-## 🌍 Visualization
+## Visualization
 
 ### Interactive Folium Heatmaps
 - **Map Layers**: Fire risk scores overlaid as a heatmap with a red–orange–yellow gradient.
@@ -702,7 +695,7 @@ This script implements a full end-to-end pipeline for monthly fire risk predicti
 
 ---
 
-## 📌 Recommendations
+## Recommendations
 
 ### Use Threshold = 0.55
 - Balanced fire detection rate (recall ~38%) with manageable false positives.
@@ -715,7 +708,7 @@ This script implements a full end-to-end pipeline for monthly fire risk predicti
 
 ---
 
-## 📂 Output Files
+## Output Files
 - `fire_risk_heatmap.html`: Interactive map for current/future fire risks.
 - `future_fire_risk_panel_6m.csv`: Feature panel for 6-month forecast.
 - `future_panel_predictions.csv`: Fire probabilities for each building-month.
