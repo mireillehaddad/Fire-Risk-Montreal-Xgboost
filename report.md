@@ -133,26 +133,6 @@ Where X includes:
 | **Weighted avg** | 0.87  | 0.87   | 0.87     | 132,757 |
 
 ROC AUC: 0.936
-Note: these metrics were obtained on a random train/test split
-
-### RandomForestClassifier on panel dataset
-(see datamodel/random_forest_from_panel_month.py)
-A random forest algorithm was also tried with the panel dataset enriched with all engineered features.
-The following techniques were used to overcome the imbalance of the dataset
-- simple random forest
-- balanced random forest from (imblearn package) 
-- oversampling (SMOTE - Synthetic Minority Oversampling Technique)
-
-The results were poor, with the best results achieved with balanced random forest: 
-|             | precision  |  recall | f1-score | support  |
-| ----------- | ---------- | ------- | -------- | -------- |
-|           0 |     0.988  |   0.931 |    0.958 |  3674405 |
-|           1 |     0.027  |   0.139 |    0.045 |    50239 |
-|     accuracy|            |         |    0.920 |  3724644 |
-|    macro avg|      0.507 |    0.535|    0.502 |  3724644 |
-| weighted avg|      0.975 |    0.920|    0.946 |  3724644 |
-
-Since it took way longer to train and we obtained a much poorer result than XGBoots, this model was abandonned.
 
 **Target variable**
 ```
@@ -182,6 +162,28 @@ Y = P(Fire month | X)
 | **Weighted avg** | 0.87      | 0.87   | 0.87     | 132,757 |
 
 **ROC AUC:** 0.935
+
+Note: these metrics were obtained on a random train/test split
+
+### RandomForestClassifier on panel dataset
+(see datamodel/random_forest_from_panel_month.py)
+A random forest algorithm was also tried with the panel dataset enriched with all engineered features.
+The following techniques were used to overcome the imbalance of the dataset
+- simple random forest
+- balanced random forest from (imblearn package) 
+- oversampling (SMOTE - Synthetic Minority Oversampling Technique)
+
+The results were poor, with the best results achieved with balanced random forest: 
+|             | precision  |  recall | f1-score | support  |
+| ----------- | ---------- | ------- | -------- | -------- |
+|           0 |     0.988  |   0.931 |    0.958 |  3674405 |
+|           1 |     0.027  |   0.139 |    0.045 |    50239 |
+|     accuracy|            |         |    0.920 |  3724644 |
+|    macro avg|      0.507 |    0.535|    0.502 |  3724644 |
+| weighted avg|      0.975 |    0.920|    0.946 |  3724644 |
+
+Since it took way longer to train and we obtained a much poorer result than XGBoots, this model was abandonned.
+
 
 ### LGBMClassifier
 (Located in file [Model-building.ipynb](Model-building.ipynb), for pipeline see [instructions](README.md/#how-to-run-the-data-pipeline))
