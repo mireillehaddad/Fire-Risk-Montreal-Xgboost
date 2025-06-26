@@ -5,56 +5,53 @@
 ## Table of Contents
 
 1. [Purpose](#purpose)
-
-2. [Data Cleaning and Merging Pipeline](#data-cleaning-and-merging-pipeline)
+2. [Two main approaches](#two-main-approaches)
+3. [Data Cleaning and Merging Pipeline](#data-cleaning-and-merging-pipeline)
    - [evaluation_fonciere](#evaluation_fonciere)
-      - [Description](#description)
-      - [How to Run](#how-to-run)
-      - [Output](#output)
-      - [Summary of Code Workflow](#summary-of-code-workflow)
-      - [Main Steps](#main-steps)
-      - [Data Cleaning Summary](#data-cleaning-summary)
-      - [Feature Engineering Summary](#feature-engineering-summary)
-      - [Dropped/Excluded Columns](#droppedexcluded-columns)
-      - [Final Output Columns](#final-output-columns)
+     - [Description](#description)
+     - [How to Run](#how-to-run)
+     - [Output](#output)
+     - [Summary of Code Workflow](#summary-of-code-workflow)
+     - [Main Steps](#main-steps)
+     - [Data Cleaning Summary](#data-cleaning-summary)
+     - [Feature Engineering Summary](#feature-engineering-summary)
+     - [Dropped/Excluded Columns](#droppedexcluded-columns)
+     - [Final Output Columns](#final-output-columns)
    - [main_evaluation_feat_eng.py](#description-main_evaluation_feat_engpy)
-      - [Goal of the Script](#goal-of-the-script)
-      - [Load Datasets](#1-load-datasets)
-      - [Preprocessing](#2-preprocessing)
-      - [Spatial Join](#3-spatial-join)
-      - [Merge Fire Info Back](#4-merge-fire-info-back)
-      - [Time Features](#5-time-features)
-      - [Fire Zone Aggregates](#6-fire-zone-aggregates)
-      - [Missing Coordinates](#7-missing-coordinates)
-      - [Feature Selection](#8-feature-selection)
-      - [Save Output](#9-save-output)
-      - [Summary Stats](#summary-stats)
+     - [Goal of the Script](#goal-of-the-script)
+     - [Load Datasets](#1-load-datasets)
+     - [Preprocessing](#2-preprocessing)
+     - [Spatial Join](#3-spatial-join)
+     - [Merge Fire Info Back](#4-merge-fire-info-back)
+     - [Time Features](#5-time-features)
+     - [Fire Zone Aggregates](#6-fire-zone-aggregates)
+     - [Missing Coordinates](#7-missing-coordinates)
+     - [Feature Selection](#8-feature-selection)
+     - [Save Output](#9-save-output)
+     - [Summary Stats](#summary-stats)
    - [dense_panel_building_month.py](#description--dense_panel_building_monthpy)
-
-3. [Model Evaluation](#3-model-evaluation-criteria)
-
-4. [Models Tried](#4-models-tried)
+4. [Model Evaluation Criteria](#3-model-evaluation-criteria)
+5. [Models Tried](#4-models-tried)
    - [RandomForestClassifier](#randomforestclassifier)
-      - [Target Variable](#target-variable)
-      - [Confusion Matrix](#confusion-matrix)
-      - [Classification Report](#classification-report)
+     - [Target Variable](#target-variable)
+     - [Confusion Matrix](#confusion-matrix)
+     - [Classification Report](#classification-report)
    - [LGBMClassifier](#lgbmclassifier)
-      - [Target Variable](#target-variable-1)
-      - [Model Results (All Months)](#model-results-all-months)
-      - [Model Results (Months 1–12 only)](#model-results-months-1–12-only)
+     - [Target Variable](#target-variable-1)
+     - [Model Results (All Months)](#model-results-all-months)
+     - [Model Results (Months 1–12 only)](#model-results-months-1–12-only)
    - [XGBoost](#xgboost)
-      - [Script Location](#script-location)
-      - [Data Pipeline](#data-pipeline)
-      - [Feature Engineering](#feature-engineering)
-      - [Model](#model-xgboostclassifier)
-      - [Evaluation](#evaluation-default-threshold--05)
-      - [Threshold Optimization](#threshold-optimization)
-      - [Final Model Evaluation](#final-model-evaluation--threshold--055)
-      - [Recommendations](#recommendations)
-      - [Binary vs Probabilistic Forecasting](#binary-vs-probabilistic-forecasting)
-      - [Summary](#summary)
-
-5. [Forecasting and Visualization](#forecasting-and-visualization)
+     - [Script Location](#script-location)
+     - [Data Pipeline](#data-pipeline)
+     - [Feature Engineering](#feature-engineering)
+     - [Model](#model-xgboostclassifier)
+     - [Evaluation](#evaluation-default-threshold--05)
+     - [Threshold Optimization](#threshold-optimization)
+     - [Final Model Evaluation](#final-model-evaluation--threshold--055)
+     - [Recommendations](#recommendations)
+     - [Binary vs Probabilistic Forecasting](#binary-vs-probabilistic-forecasting)
+     - [Summary](#summary)
+6. [Forecasting and Visualization](#forecasting-and-visualization)
    - [Data Overview](#data-overview)
    - [Feature Engineering](#feature-engineering-1)
    - [Model Training](#model-training)
@@ -74,6 +71,45 @@
 Project A – Predicting High Fire Risk Areas in Montreal
 
 Objective: The objective of this project is to predict high fire risk areas by month in the city of Montreal, based on historical firefighter intervention data and additional open datasets.
+
+## Two main approaches
+
+### "Panel" Approach
+Structure:
+Each building has one row per month (e.g., Jan 2018, Feb 2018, ..., Dec 2022).
+
+```
+ID_UEV | YEAR | MONTH | Features... | fire_occurred
+-----------------------------------------------------
+001    | 2020 |   1   | ...         | 0
+001    | 2020 |   2   | ...         | 0
+001    | 2020 |   3   | ...         | 1
+...
+fire_occurred = 1 for the month of fire; 0 otherwise.
+```
+
+No fire_month column needed — you're modeling fire per building-month.
+
+Good for temporal modeling, like survival analysis or monthly fire risk.
+
+### Fire Month or 13 Per-Building Row Approach
+Structure:
+One row per building; fire_month = 1–12 if fire occurred, else 13.
+
+
+```
+ID_UEV | Features... | fire_month
+----------------------------------
+001    | ...         | 3
+002    | ...         | 13
+003    | ...         | 7
+...
+```
+Simple classification task: which month is the fire, or no fire (13).
+
+Only one row per building — no temporal unfolding.
+
+fire_month = 13 explicitly encodes “no fire”.
 
 
 
@@ -299,10 +335,7 @@ All file paths are dynamically resolved.
 - ~41 clean modeling-ready features
 
 
-
-## Description : dense_panel_building_month.py
-
-# Fire Risk Monthly Panel Construction — Detailed Summary
+## Fire Risk Monthly Panel Construction — Detailed Summary
 
 This document explains the Python script that constructs a monthly panel dataset of buildings in Montréal enriched with fire event labels and engineered features. The final output is a panel of building-month combinations, used for predictive modeling of fire incidents.
 
@@ -400,7 +433,7 @@ Consider borough-level aggregation or modeling using NO_ARROND_ILE_CUM
 
 
 
-# 3. Model evaluation criteria
+## 3. Model evaluation criteria
 - Priority is given to recall over precision as we'd rather capture more fire risk including a few false negatives than miss high risk buildings
 - Train set/Test set : we used a temporal split rather than random split
 Train = data before 2024
