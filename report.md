@@ -98,9 +98,9 @@ This is especially important because of the approximation of fire location due t
 (Located in file [EDA-incident-evaluation-fonciere.ipynb](EDA-incident-evaluation-fonciere.ipynb), for pipeline see [instructions](README.md/#how-to-run-the-data-pipeline))
 
 **Target Variable**
-
+```
 Y = P(Fire | X)
-
+```
 Where X includes:
 
 - `log_terrain`
@@ -111,7 +111,7 @@ Where X includes:
 - `density`
 
 
-**Confusion Matrix**
+<u>Confusion Matrix</u>
 
 |               | Predicted False | Predicted True |
 |---------------|------------------|----------------|
@@ -121,7 +121,7 @@ Where X includes:
 
 
 
-**Classification Report**
+<u>Classification Report</u>
 
 | Label        | Precision | Recall | F1-score | Support |
 |--------------|-----------|--------|----------|---------|
@@ -131,7 +131,6 @@ Where X includes:
 | **Accuracy** |           |        | 0.87     | 132,757 |
 | **Macro avg**| 0.86      | 0.87   | 0.86     | 132,757 |
 | **Weighted avg** | 0.87  | 0.87   | 0.87     | 132,757 |
-
 
 ROC AUC: 0.936
 Note: these metrics were obtained on a random train/test split
@@ -154,6 +153,35 @@ The results were poor, with the best results achieved with balanced random fores
 | weighted avg|      0.975 |    0.920|    0.946 |  3724644 |
 
 Since it took way longer to train and we obtained a much poorer result than XGBoots, this model was abandonned.
+
+**Target variable**
+```
+Y = P(Fire month | X)
+```
+
+
+
+<u>Confusion Matrix</u>
+
+|               | Predicted False | Predicted True |
+|---------------|------------------|----------------|
+| **Actual False** | 64,102           | 9,511          |
+| **Actual True**  | 8,319            | 50,825         |
+
+---
+
+<u>Classification Report</u>
+
+| Label            | Precision | Recall | F1-score | Support |
+|------------------|-----------|--------|----------|---------|
+| **False**        | 0.89      | 0.87   | 0.88     | 73,613  |
+| **True**         | 0.84      | 0.86   | 0.85     | 59,144  |
+|                  |           |        |          |         |
+| **Accuracy**     |           |        | 0.87     | 132,757 |
+| **Macro avg**    | 0.86      | 0.87   | 0.86     | 132,757 |
+| **Weighted avg** | 0.87      | 0.87   | 0.87     | 132,757 |
+
+**ROC AUC:** 0.935
 
 ### LGBMClassifier
 (Located in file [Model-building.ipynb](Model-building.ipynb), for pipeline see [instructions](README.md/#how-to-run-the-data-pipeline))
