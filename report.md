@@ -39,9 +39,13 @@
 
 4. [Models Tried](#models-tried)  
    4.1 [RandomForestClassifier](#randomforestclassifier)
+
+     4.1.1 [on flat dataset](#on-flat-dataset)
     - [Target Variable](#target-variable)
     - [Confusion Matrix](#confusion-matrix)
     - [Classification Report](#classification-report)
+   
+     4.1.2 [on panel dataset](#on-panel-dataset)
 
    4.2 [LGBMClassifier](#lgbmclassifier)
     - [Target Variable](#target-variable-1)
@@ -411,13 +415,15 @@ Consider borough-level aggregation or modeling using NO_ARROND_ILE_CUM
 - Priority is given to recall over precision as we'd rather capture more fire risk including a few false negatives than miss high risk buildings
 - Train set/Test set : we used a temporal split rather than random split
 Train = data before 2024
-Test = data of 2024-2025
+Test = data of 2024 (full year)
 
 This is especially important because of the approximation of fire location due to data obfuscation to avoid leaking knowledge of fires into the train set.
 
 # 4. Models tried
 
 ### RandomForestClassifier
+
+#### On flat dataset
 (Located in file [EDA-incident-evaluation-fonciere.ipynb](EDA-incident-evaluation-fonciere.ipynb), for pipeline see [instructions](README.md/#how-to-run-the-data-pipeline))
 
 **Target Variable**
@@ -457,6 +463,26 @@ Where X includes:
 
 
 ROC AUC: 0.936
+Note: these metrics were obtained on a random train/test split
+
+#### On panel dataset
+(see datamodel/random_forest_from_panel_month.py)
+A random forest algorithm was also tried with the panel dataset enriched with all engineered features.
+The following techniques were used to overcome the imbalance of the dataset
+- simple random forest
+- balanced random forest from (imblearn package) 
+- oversampling (SMOTE - Synthetic Minority Oversampling Technique)
+
+The results were poor, with the best results achieved with balanced random forest: 
+|             | precision  |  recall | f1-score | support  |
+| ----------- | ---------- | ------- | -------- | -------- |
+|           0 |     0.988  |   0.931 |    0.958 |  3674405 |
+|           1 |     0.027  |   0.139 |    0.045 |    50239 |
+|     accuracy|            |         |    0.920 |  3724644 |
+|    macro avg|      0.507 |    0.535|    0.502 |  3724644 |
+| weighted avg|      0.975 |    0.920|    0.946 |  3724644 |
+
+Since it took way longer to train and we obtained a much poorer result than XGBoots, this model was abandonned.
 
 ### LGBMClassifier
 (Located in file [Model-building.ipynb](Model-building.ipynb), for pipeline see [instructions](README.md/#how-to-run-the-data-pipeline))
