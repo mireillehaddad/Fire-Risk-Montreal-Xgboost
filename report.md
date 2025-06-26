@@ -126,13 +126,13 @@ This script processes the [Montréal property evaluation dataset](https://donnee
 python ./dataprep/evaluation_fonciere.py
 ```
 
-### 📤 Output
+### Output
 - `datasets/cleaned/eval_cleaned.csv`  
 - `datasets/cleaned/eval_cleaned_feat_eng.csv` ← *(Recommended for modeling)*
 
 ---
 
-### 🔍 Summary of Code Workflow
+### Summary of Code Workflow
 
 This script performs:
 - Cleaning of raw columns
@@ -142,7 +142,7 @@ This script performs:
 
 ---
 
-### ✅ Main Steps
+### Main Steps
 
 1. **Load raw dataset**
 2. **Clean columns:**
@@ -184,7 +184,7 @@ This script performs:
 
 ---
 
-### 🗃️ Dropped/Excluded Columns
+### Dropped/Excluded Columns
 
 - `_ANNEE_CONSTRUCTION_NUM`
 - Temporary columns used for imputation
@@ -192,7 +192,7 @@ This script performs:
 
 ---
 
-### 📦 Final Output Columns
+### Final Output Columns
 
 ```text
 [
@@ -223,7 +223,7 @@ Produce a feature-rich dataset at the building level that combines:
 - Geographic information (coordinates, zones)  
 - Temporal and structural features
 
-📁 **Final output file**: `evaluation_fire_coordinates_date_feat_eng_2.csv`
+ **Final output file**: `evaluation_fire_coordinates_date_feat_eng_2.csv`
 
 ---
 
@@ -339,7 +339,7 @@ All file paths are dynamically resolved.
 
 This document explains the Python script that constructs a monthly panel dataset of buildings in Montréal enriched with fire event labels and engineered features. The final output is a panel of building-month combinations, used for predictive modeling of fire incidents.
 
-🗂️ Input & Output
+ Input & Output
 
 Input:
 
@@ -349,9 +349,9 @@ Output:
 
 building_month_fire_panel_feat_eng.csv: Building-month panel with labels and features
 
-📊 Workflow Steps
+Workflow Steps
 
-✅ Step 1: Setup Paths and Load Data
+ Step 1: Setup Paths and Load Data
 
 Define project root with Path.cwd().parents[1]
 
@@ -359,7 +359,7 @@ Load CSV using pandas
 
 Preview data and confirm file existence
 
-✅ Step 2: Preprocessing & Cleaning
+ Step 2: Preprocessing & Cleaning
 
 Convert fire_date to datetime
 
@@ -369,7 +369,7 @@ Drop records missing LONGITUDE, LATITUDE, or ID_UEV
 
 Convert to GeoDataFrame with EPSG:32188 projection
 
-✅ Step 3: Construct Dense Panel
+ Step 3: Construct Dense Panel
 
 Extract unique buildings
 
@@ -379,13 +379,13 @@ Create full cartesian product → Dense panel (building × month)
 
 Merge with building coordinates
 
-✅ Step 4: Label Fire Occurrence
+ Step 4: Label Fire Occurrence
 
 Identify building-months with fire events
 
 Create HAS_FIRE_THIS_MONTH binary column
 
-✅ Step 5: Time-Based Features
+ Step 5: Time-Based Features
 
 Extract month_num and year
 
@@ -401,7 +401,7 @@ Add recency features:
 
 has_fire_last_month, months_since_last_fire
 
-✅ Step 6: Merge Static Building Features
+ Step 6: Merge Static Building Features
 
 Extract one row per building from cleaned GeoDataFrame
 
@@ -417,13 +417,13 @@ Fire zone features: FIRE_FREQUENCY_ZONE, FIRE_RATE_ZONE, FIRE_COUNT_LAST_YEAR_ZO
 
 Ensure alignment using valid building IDs
 
-✅ Step 7: Save Final Dataset
+ Step 7: Save Final Dataset
 
 Export the resulting panel to CSV:
 
 datasets/cleaned/building_month_fire_panel_feat_eng.csv
 
-🚀 Next Steps
+ Next Steps
 
 Add weather, crime, or inspection datasets for richer modeling
 
@@ -606,23 +606,23 @@ Evaluated thresholds: `0.2` → `0.55`
 ---
 
 ## Recommendations
-- ✅ **Use threshold = 0.50–0.55** depending on recall vs precision preference
-- ⚠️ **Precision is low**, so interpret predictions as risk levels
-- 🔎 **Use predicted probabilities** for prioritizing inspections
-- ➕ Add weather, crime, or inspection features for improved separation
+-  **Use threshold = 0.50–0.55** depending on recall vs precision preference
+-  **Precision is low**, so interpret predictions as risk levels
+-  **Use predicted probabilities** for prioritizing inspections
+-  Add weather, crime, or inspection features for improved separation
 
 ---
 
-## 📈 Binary vs Probabilistic Forecasting
-| Aspect                         | `model.predict()` (Binary)                  | `model.predict_proba()` + Threshold |
-|--------------------------------|---------------------------------------------|-------------------------------------|
-| Nature                         | Hard decision (0 or 1)                       | Probabilistic risk score (0.0–1.0)  |
-| Control over recall/precision  | ❌ Fixed at 0.5                              | ✅ Fully tunable                    |
-| Risk prioritization            | ❌ Not possible                              | ✅ Buildings can be ranked          |
-| Early warning usability        | ⚠️ Rigid                                     | ✅ Flexible, interpretable          |
-| Best suited metric             | Accuracy, F1                                | F2 Score, Precision@K, Recall       |
+## Binary vs Probabilistic Forecasting
+| Aspect                         | `model.predict()` (Binary)              | `model.predict_proba()` + Threshold |
+|--------------------------------|-----------------------------------------|-----------------------------------|
+| Nature                         | Hard decision (0 or 1)                  | Probabilistic risk score (0.0–1.0) |
+| Control over recall/precision  |  Fixed at 0.5                           | Fully tunable                     |
+| Risk prioritization            | Not possible                            | Buildings can be ranked           |
+| Early warning usability        |  Rigid                                  | Flexible, interpretable           |
+| Best suited metric             | Accuracy, F1                            | F2 Score, Precision@K, Recall     |
 
-> ✅ **Recommendation:** Use predicted probabilities to forecast fire risk, prioritize inspections, and adapt to seasonal or strategic needs.
+> **Recommendation:** Use predicted probabilities to forecast fire risk, prioritize inspections, and adapt to seasonal or strategic needs.
 
 ---
 
@@ -633,7 +633,7 @@ Evaluated thresholds: `0.2` → `0.55`
 
 ---
 
-## 📊 Summary
+## Summary
 XGBoost + panel-level fire features + lag history yields a decent early-warning fire detection model. Prioritize **recall and interpretability**, refine with more context over time.
 """
 
@@ -681,7 +681,7 @@ This script implements a full end-to-end pipeline for monthly fire risk predicti
 
 ---
 
-## 📊 Evaluation and Threshold Tuning
+## Evaluation and Threshold Tuning
 
 ### Metrics
 - Imbalanced classification: only ~1.3% of data are fire cases.
