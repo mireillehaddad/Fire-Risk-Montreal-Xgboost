@@ -2,8 +2,6 @@
 
 ## Table of Contents
 
-## Table of Contents
-
 1. [Purpose](#purpose)
 2. [Two main approaches](#two-main-approaches)
 3. [Data Cleaning and Merging Pipeline](#data-cleaning-and-merging-pipeline)
