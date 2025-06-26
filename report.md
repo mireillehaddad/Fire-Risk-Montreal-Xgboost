@@ -134,7 +134,7 @@ This script performs:
 
 ---
 
-### 🛠️ Feature Engineering Summary
+### Feature Engineering Summary
 
 | Feature Name             | Description                                                     |
 |--------------------------|-----------------------------------------------------------------|
@@ -291,7 +291,7 @@ All file paths are dynamically resolved.
 
 ---
 
-### ✅ Summary Stats
+### Summary Stats
 
 - ~664K total buildings
 - ~295K matched to fire incidents
@@ -487,12 +487,6 @@ I then tried to train only on months 1-12:
 
 
 
-
-
-### Xgboost 
-# Rewriting the markdown file after environment reset
-
-markdown_content = """
 # Monthly Fire Risk Prediction Using XGBoost
 
 ## Script Location
@@ -686,7 +680,7 @@ This script implements a full end-to-end pipeline for monthly fire risk predicti
 
 ---
 
-## ✅ Model Deployment Steps
+## Model Deployment Steps
 
 1. Save the trained XGBoost model using `joblib`.
 2. Load future panel, run predictions using saved model.
