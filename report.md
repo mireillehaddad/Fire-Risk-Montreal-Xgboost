@@ -40,7 +40,7 @@
      - [Target Variable](#target-variable-1)
      - [Model Results (All Months)](#model-results-all-months)
      - [Model Results (Months 1–12 only)](#model-results-months-1–12-only)
-   - [XGBoost](#xgboost)
+   - [Monthly Fire Risk Prediction Using XGBoost](#Monthly-Fire-Risk-Prediction-Using-XGBoost)
      - [Script Location](#script-location)
      - [Data Pipeline](#data-pipeline)
      - [Feature Engineering](#feature-engineering)
