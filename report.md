@@ -80,6 +80,7 @@ fire_month = 13 explicitly encodes “no fire”.
 
 ## Data Cleaning and Merging Pipeline
 
+[Diagram](https://docs.google.com/drawings/d/1JCMVO718Qjabe6FudeCMrT7FYWtNYDn651mDeG2KMnk/edit) showing the data cleaning and merging pipeline:
 ![img.png](img.png)
 ## Model evaluation criteria
 - Priority is given to recall over precision as we'd rather capture more fire risk including a few false negatives than miss high risk buildings
