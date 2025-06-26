@@ -49,16 +49,6 @@
      - [Recommendations](#recommendations)
      - [Binary vs Probabilistic Forecasting](#binary-vs-probabilistic-forecasting)
      - [Summary](#summary)
-6. [Forecasting and Visualization](#forecasting-and-visualization)
-   - [Data Overview](#data-overview)
-   - [Feature Engineering](#feature-engineering-1)
-   - [Model Training](#model-training)
-   - [Evaluation and Threshold Tuning](#evaluation-and-threshold-tuning)
-   - [Future Panel Forecasting](#future-panel-forecasting)
-   - [Visualization](#visualization)
-   - [Model Deployment Steps](#model-deployment-steps)
-   - [Recommendations](#recommendations-1)
-   - [Output Files](#output-files)
 
 
 
