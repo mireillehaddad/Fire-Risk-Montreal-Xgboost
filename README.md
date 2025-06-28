@@ -6,6 +6,13 @@
 - [Data Pipeline Diagram](#data-pipeline-diagram)
 - [How to Run the Data Pipeline](#how-to-run-the-data-pipeline)
 
+## Common data pipeline target:
+
+I, Evgeniy Ivlev, will use this file: `./datasets/cleaned/evaluation_fire_coordinates_date_feat_eng_2.csv` to produce my 1-13 month data and run my models.
+
+![img_1.png](img_1.png)
+
+This script produces the file above: `python ./datapipeline_panel_add_features.py`
 ## [Data pipeline diagram](https://docs.google.com/drawings/d/1JSGUZZg9EYoyRtfRQbYmxvmRRgAAAtKCh4ktoKaSbEA/edit)
 
 ![img.png](images/img.png)
@@ -62,20 +69,30 @@ python ./datapipeline_panel_month.py
 
 
 ### [Running the panel data pipeline 2]
-
-
+** One liner to run the whole pipeline
 ```commandline
-python ./dataprep/evaluation_fonciere.py                   ====>eval_cleaned_feat_eng.csv
-python ./dataprep/interventions_HAS_FIRE_binary_analysis.py ====> interventions_cleaned_with_has_fire.csv
-python ./dataprep/main_evaluation_feat_eng.py              ====> eval_fire_Coordinates_date_feat_eng_2.csv
+python ./datapipeline_panel_add_features.py
+```
 
+This is equivalent to running the individual scripts below:
+```commandline
+# ====>eval_cleaned_feat_eng.csv
+python ./dataprep/evaluation_fonciere.py
 
-python ./dataprep/dense_panel_building_month.py         ====> building_month_fire_panel_feat_eng.csv
+# ====> interventions_cleaned_with_has_fire.csv            
+python ./dataprep/interventions_HAS_FIRE_binary_analysis.py
 
+# ====> eval_fire_Coordinates_date_feat_eng_2.csv
+python ./dataprep/main_evaluation_feat_eng.py
+
+# ====> building_month_fire_panel_feat_eng.csv
+python ./dataprep/dense_panel_building_month.py
+```
+     
 for time model run in dataprep:  time_model_Xgboost.ipynb   (When we run the same .py file we are having a memory error)
 
 for forcasting and some visualizations run in dataprep:  time_model_Xgboost_forcasting_visualizatioons.ipynb 
-```
+
 
 
 
