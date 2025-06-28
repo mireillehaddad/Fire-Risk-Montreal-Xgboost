@@ -12,6 +12,7 @@ I, Evgeniy Ivlev, will use this file: `./datasets/cleaned/evaluation_fire_coordi
 
 ![img_1.png](img_1.png)
 
+This script produces the file above: `python ./datapipeline_panel_add_features.py`
 ## [Data pipeline diagram](https://docs.google.com/drawings/d/1JSGUZZg9EYoyRtfRQbYmxvmRRgAAAtKCh4ktoKaSbEA/edit)
 
 ![img.png](images/img.png)
