@@ -6,6 +6,12 @@
 - [Data Pipeline Diagram](#data-pipeline-diagram)
 - [How to Run the Data Pipeline](#how-to-run-the-data-pipeline)
 
+## Common data pipeline target:
+
+I, Evgeniy Ivlev, will use this file: `./datasets/cleaned/evaluation_fire_coordinates_date_feat_eng_2.csv` to produce my 1-13 month data and run my models.
+
+![img_1.png](img_1.png)
+
 ## [Data pipeline diagram](https://docs.google.com/drawings/d/1JSGUZZg9EYoyRtfRQbYmxvmRRgAAAtKCh4ktoKaSbEA/edit)
 
 ![img.png](images/img.png)
