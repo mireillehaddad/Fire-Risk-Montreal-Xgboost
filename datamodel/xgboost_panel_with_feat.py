@@ -22,10 +22,12 @@ ROOT = Path(__file__).parents[1]
 print(f"Root folder:{ROOT}")
 
 # 🔹 Define input/output paths using ROOT
+model_name="xgboost_panel_with_feat"
 INPUT_CSV = ROOT / "datasets" / "cleaned" / "building_month_fire_panel_feat_eng.csv"
-OUTPUT_CSV = ROOT / "datamodel" / "xgboost_panel_with_feat_label_enc_pred.csv"
-ENCODER_FILE = ROOT / "datamodel" / "xgboost_panel_with_feat_label_enc.pkl"
-MODEL_FILE = ROOT / "datamodel" / "xgboost_panel_with_feat.pkl"
+OUTPUT_CSV = ROOT / "datamodel" / f"{model_name}_pred.csv"
+ENCODER_FILE = ROOT / "datamodel" / f"{model_name}_label_enc.pkl"
+FEATURE_LIST_FILE = ROOT / "datamodel" / f"{model_name}_features.pkl"
+MODEL_FILE = ROOT / "datamodel" / f"{model_name}.pkl"
 
 # 🔍 Optional: check existence
 print("[input exists?]", INPUT_CSV.exists(), "➜", INPUT_CSV)
@@ -52,6 +54,8 @@ print_timestamped_message("Data loading complete.")
 #         .astype(int)
 #     )
 
+# multiple versions of feature list - comment out according to the version you want to use
+# complete feature list
 features = [
     "MUNICIPALITE", "ETAGE_HORS_SOL", "NOMBRE_LOGEMENT", "AGE_BATIMENT",
     "CODE_UTILISATION", "CATEGORIE_UEF", "SUPERFICIE_TERRAIN", "SUPERFICIE_BATIMENT",
@@ -59,6 +63,45 @@ features = [
     "FIRE_FREQUENCY_ZONE", "FIRE_RATE_ZONE", "FIRE_COUNT_LAST_YEAR_ZONE", "BUILDING_COUNT",
     "FIRE_RATE_ZONE_NORM", "FIRE_COUNT_LAST_YEAR_ZONE_NORM", 
     "fire_last_1m", "fire_last_2m", "fire_last_3m","fire_cumcount","fire_rolling_3m","fire_rolling_6m","fire_rolling_12m",
+    "month_num", "year"  #,"season"
+]
+
+# excludes non normalized version of normalized features and time lag features as well as fire_rolling features
+# features = [
+#     "MUNICIPALITE", "ETAGE_HORS_SOL", "NOMBRE_LOGEMENT", "AGE_BATIMENT",
+#     "CODE_UTILISATION", "CATEGORIE_UEF", "SUPERFICIE_TERRAIN", "SUPERFICIE_BATIMENT",
+#     "NO_ARROND_ILE_CUM", "RATIO_SURFACE", "DENSITE_LOGEMENT", "HAS_MULTIPLE_LOGEMENTS",
+#     "FIRE_FREQUENCY_ZONE", #"FIRE_RATE_ZONE", "FIRE_COUNT_LAST_YEAR_ZONE", 
+#     "BUILDING_COUNT",
+#     "FIRE_RATE_ZONE_NORM", "FIRE_COUNT_LAST_YEAR_ZONE_NORM", 
+#     #"fire_last_1m", "fire_last_2m", "fire_last_3m","fire_cumcount","fire_rolling_3m","fire_rolling_6m","fire_rolling_12m",
+#     "month_num", "year"  #,"season"
+# ]
+
+# excludes non normalized version of normalized features and time lag features 
+features = [
+    "MUNICIPALITE", "ETAGE_HORS_SOL", "NOMBRE_LOGEMENT", "AGE_BATIMENT",
+    "CODE_UTILISATION", "CATEGORIE_UEF", "SUPERFICIE_TERRAIN", "SUPERFICIE_BATIMENT",
+    "NO_ARROND_ILE_CUM", "RATIO_SURFACE", "DENSITE_LOGEMENT", "HAS_MULTIPLE_LOGEMENTS",
+    "FIRE_FREQUENCY_ZONE", #"FIRE_RATE_ZONE", "FIRE_COUNT_LAST_YEAR_ZONE", 
+    "BUILDING_COUNT",
+    "FIRE_RATE_ZONE_NORM", "FIRE_COUNT_LAST_YEAR_ZONE_NORM", 
+    #"fire_last_1m", "fire_last_2m", "fire_last_3m",
+    "fire_cumcount","fire_rolling_3m","fire_rolling_6m","fire_rolling_12m",
+    "month_num", "year"  #,"season"
+]
+
+# top features based on Gini importance
+features = [
+   "AGE_BATIMENT",
+    
+    "NO_ARROND_ILE_CUM", "RATIO_SURFACE", "DENSITE_LOGEMENT", "NOMBRE_LOGEMENT",
+    #"FIRE_FREQUENCY_ZONE", #"FIRE_RATE_ZONE", "FIRE_COUNT_LAST_YEAR_ZONE", 
+    #"BUILDING_COUNT",
+    #"FIRE_RATE_ZONE_NORM", "FIRE_COUNT_LAST_YEAR_ZONE_NORM", 
+    #"fire_last_1m", "fire_last_2m", "fire_last_3m",
+    "fire_cumcount",#"fire_rolling_3m","fire_rolling_6m",
+    "fire_rolling_12m",
     "month_num", "year"  #,"season"
 ]
 target = "HAS_FIRE_THIS_MONTH"
@@ -90,7 +133,7 @@ X_test = test_df[features]
 y_test = test_df[target]
 
 
-print(train_df.columns.tolist())
+print(X_train.columns.tolist())
 
 
 
@@ -116,7 +159,9 @@ print_timestamped_message("Saving model...")
 with open(MODEL_FILE, 'wb') as f:
     pickle.dump(model, f)
 print_timestamped_message(f"Model saved to {MODEL_FILE}")
-
+with open(FEATURE_LIST_FILE, 'wb') as f:
+    pickle.dump(features, f)
+print_timestamped_message(f"Features list saved to {MODEL_FILE}")
 # 📊 Evaluate
 print_timestamped_message("Evaluating model ...")
 y_pred = model.predict(X_test)
@@ -128,7 +173,7 @@ print(classification_report(y_test, y_pred, digits=3))
 # Recall	0.698	0.603
 # F1-score	0.819	0.051
 # 
-# 🔵 High recall for fire class (1): You're catching 60% of fires, which is good for early detection.
+# 🔵 High recall for fire class (1): We're catching 60% of fires, which is good for early detection.
 # 
 # 🔴 Very low precision for fire class (1): Among the predicted fires, only 2.7% are actually fires.
 # 
@@ -143,7 +188,6 @@ print(classification_report(y_test, y_pred, digits=3))
 # 
 # 
 
-# %% [markdown]
 # ✅ What You Did Well
 # Feature engineering helped improve recall for rare event (fire).
 # 
@@ -164,9 +208,11 @@ print_timestamped_message("Predicting test set probabilities")
 y_probs = model.predict_proba(X_test)[:, 1]
 
 
-result_test = X_test.copy(deep=True)
+result_test = test_df.copy(deep=True)
 result_test['predicted_result']=y_pred
 result_test['predicted_proba']=y_probs
 result_test['target']=y_test
 result_test.to_csv(OUTPUT_CSV,index=False)
+
+print_timestamped_message(f"Saved test set as {OUTPUT_CSV}")
 
