@@ -74,17 +74,24 @@ print(f"X_train {X_train.shape}")
 print(f"X_test {X_test.shape}")
 print(f"y_train {y_train.shape}")
 print(f"y_test {y_test.shape}")
-
-#Use SMOTE to oversample the minority class
-oversample = SMOTE()
-over_X, over_y = oversample.fit_resample(X_train, y_train)
-rf = RandomForestClassifier(n_estimators=100, random_state=42)
-#using balanced random forest to compensate for class imbalance
-#rf = BalancedRandomForestClassifier(n_estimators=100, random_state=42)
-print(f"over X : {over_X.isnull().sum()}")
-print_timestamped_message("Training model ...")
+#Scenario 1 :Simple RandomForest
+# rf = RandomForestClassifier(n_estimators=100, random_state=42)
+#print_timestamped_message("Training model ...")
 #rf.fit(X_train,y_train)
-rf.fit(over_X,over_y)
+
+#Scenario 2: using balanced random forest to compensate for class imbalance
+rf = BalancedRandomForestClassifier(n_estimators=100, random_state=42)
+print_timestamped_message("Training model ...")
+rf.fit(X_train,y_train)
+
+#Scenario 3: Use SMOTE to oversample the minority class
+#oversample = SMOTE()
+#over_X, over_y = oversample.fit_resample(X_train, y_train)
+#rf = RandomForestClassifier(n_estimators=100, random_state=42)
+
+
+#print_timestamped_message("Training model ...")
+#rf.fit(over_X,over_y)
 
 # Save the best model
 print_timestamped_message("Saving model...")
@@ -107,7 +114,7 @@ result_test['target']=y_test
 result_test.to_csv(OUTPUT_CSV,index=False)
 print_timestamped_message(f"End of {__file__}")
 
-
+# Result for BalancedRandomForest
 # #2025-06-24 13:31:08 Predicting target values for X_test
 #               precision    recall  f1-score   support
 
