@@ -2,9 +2,30 @@
 
 # all-capstone-project-summer-2025-team-6
 ## Table of Contents
-
+- [Getting started](#getting-started)
 - [Data Pipeline Diagram](#data-pipeline-diagram)
 - [How to Run the Data Pipeline](#how-to-run-the-data-pipeline)
+
+## Getting started
+1. Run the data pipeline to load, clean, impute, and add engineered features, then build the merged building x fire incident monthly panel.
+```commandline
+python ./datapipeline_panel_add_features.py
+```
+2. Train models :
+- XGBoost on panel data
+```commandline
+python ./datamodel/xgboost_panel_with_feat.py
+```
+- Random Forest on panel data
+```commandline
+python ./datamodel/random_forest_from_panel_with_feat.py
+```
+
+Each of these will train and save the model,label encoder and feature set used as Pickle files and output a CSV file containing the test set (2024 data) with added columns for predicted result and predicted probability of being in "True" class.
+
+3. datamodel/model_analysis_template.ipynb is a Jupyter notebook that can be used to load the saved models and exported test set for analysis.
+
+
 
 ## Common data pipeline target:
 
