@@ -25,7 +25,7 @@ Each of these will train and save the model,label encoder and feature set used a
 
 3. datamodel/model_analysis_template.ipynb is a Jupyter notebook that can be used to load the saved models and exported test set for analysis.
 
-
+4. datamodel/model_k_precision_visualizations.ipynb is a Jupyter notebook that can be used for visualizations of maps showing fire risk prediction by borough by to k buildings.
 
 ## Common data pipeline target:
 
