@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🔥 Fire Risk Forecasting – Different K Thresholds</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    select {
+      font-size: 16px;
+      padding: 4px;
+    }
+    iframe {
+      width: 100%;
+      height: 800px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔥 Fire Risk Forecasting – Different Top K Buildings</h2>
+  <p>Select a K value to view the predictions:</p>
+  <select id="kSelect" onchange="updateMap()">
+    <option value="fire_risk_forecasting_topK_50_dropdown_clustered_WITH_ADDRESS.html">Top K = 50</option>
+    <option value="fire_risk_forecasting_topK_100_dropdown_clustered_WITH_ADDRESS.html">Top K = 100</option>
+    <option value="fire_risk_forecasting_topK_150_dropdown_clustered_WITH_ADDRESS.html">Top K = 150</option>
+    <option value="fire_risk_forecasting_topK_200_dropdown_clustered_WITH_ADDRESS.html">Top K = 200</option>
+    <option value="fire_risk_forecasting_topK_500_dropdown_clustered_WITH_ADDRESS.html">Top K = 500</option>
+  </select>
+
+  <iframe id="mapFrame" src="fire_risk_forecasting_topK_50_dropdown_clustered_WITH_ADDRESS.html"></iframe>
+
+  <script>
+    function updateMap() {
+      const select = document.getElementById('kSelect');
+      const iframe = document.getElementById('mapFrame');
+      iframe.src = select.value;
+    }
+  </script>
+</body>
+</html>
