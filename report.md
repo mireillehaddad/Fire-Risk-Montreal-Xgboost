@@ -275,7 +275,7 @@ This script trains and evaluates a binary classifier to predict whether a fire w
 - **Macro F1**: 0.4477
 - **Weighted F1**: 0.8379
 
-> ❌ *Precision for fires is very low, but recall is moderate. Useful for prioritization, not alarms.*
+> *Precision for fires is very low, but recall is moderate. Useful for prioritization, not alarms.*
 
 ---
 
@@ -302,7 +302,7 @@ Evaluated thresholds: `0.2` → `0.55`
   - False Negatives: ~31k
   - True Positives: ~19k
 
-> 📊 *High false positives but acceptable for early warning.*
+>  *High false positives but acceptable for early warning.*
 
 ---
 
