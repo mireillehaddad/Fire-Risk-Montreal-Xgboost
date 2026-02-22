@@ -1,22 +1,8 @@
+
+
+
+
 ```mermaid
-fix this # Create virtual environment
-python -m venv .venv
-
-# Activate (Windows)
-.\.venv\Scripts\Activate
-
-# Upgrade pip
-python -m pip install --upgrade pip
-
-# Install core packages
-pip install pandas numpy matplotlib seaborn scikit-learn xgboost geopandas
-pip install notebook nbconvert
-pip install folium shapely
-
-
-# 2. Data Pipeline Overview
-```mermaid
-flowchart TD
 
   A1["datasets/raw/uniteevaluationfonciere.csv"]
   A2["datasets/raw/donneesouvertes-interventions-sim.csv"]
@@ -62,7 +48,7 @@ flowchart TD
 
 
 
-# Fire Risk Montreal – End-to-End Pipeline
+
 
 This document describes the complete data engineering and machine learning pipeline used in the Fire-Risk-Montreal-Xgboost project.
 
