@@ -3,7 +3,7 @@
 
 
 ```mermaid
-
+flowchart TD
   A1["datasets/raw/uniteevaluationfonciere.csv"]
   A2["datasets/raw/donneesouvertes-interventions-sim.csv"]
   A3["datasets/raw/donneesouvertes-interventions-sim2020.csv"]
@@ -42,7 +42,7 @@
   O7 --> S8 --> O8b
   O8b --> S13
   O8b --> S14
-  O8b --> S12 --> O12\
+  O8b --> S12 --> O12
 
   ```
 
