@@ -30,7 +30,7 @@ pip install folium shapely
 Step 4 – Clean Evaluation Foncière
 ```bash
 python .\dataprep\evaluation_fonciere.py
-
+```
 Input
 
 datasets/raw/uniteevaluationfonciere.csv
@@ -40,8 +40,9 @@ Output
 datasets/cleaned/eval_cleaned.csv
 
 Step 5 – Process Fire Interventions
+```bash
 python .\dataprep\interventions_HAS_FIRE_binary_analysis.py
-
+```
 Input
 
 datasets/raw/donneesouvertes-interventions-sim*.csv
@@ -53,8 +54,9 @@ datasets/cleaned/fire_events.csv
 Binary HAS_FIRE variable
 
 Step 6 – Feature Engineering and Geospatial Merge
+```bash
 python .\dataprep\main_evaluation_feat_eng.py
-
+```
 Inputs
 
 datasets/cleaned/eval_cleaned.csv
@@ -70,8 +72,9 @@ datasets/cleaned/evaluation_with_fire_and_coordinates.csv
 datasets/merged/merged_evaluationfonciere_adresses.csv
 
 Step 7 – Dense Monthly Panel Creation
+```bash 
 python .\dataprep\dense_panel_building_month.py
-
+```
 Input
 
 datasets/cleaned/evaluation_with_fire_and_coordinates.csv
@@ -83,8 +86,9 @@ datasets/panel/panel_building_month.csv
 dataprep/fire_risk_august_2025.csv (if generated)
 
 Step 8 – XGBoost Model Training
+```bash 
 python .\datamodel\xgboost_panel_with_feat.py
-
+```
 Input
 
 datasets/panel/panel_building_month.csv
@@ -100,8 +104,9 @@ outputs/metrics_summary.csv
 outputs/feature_importance.csv
 
 Step 12 – Forecasting and Visualizations
+``` bash 
 python .\dataprep\time_model_Xgboost_forecasting_visualizations.py
-
+```
 Outputs
 
 Time-based risk plots
@@ -113,15 +118,17 @@ Figures stored in docs/figures
 Updated docs/index.html (if applicable)
 
 Step 13 – Monthly Precision@K
+```bash
 python .\datamodel\monthly_precision_at_k.py
-
+```
 Output
 
 outputs/monthly_precision_at_k.csv
 
 Step 14 – Yearly Precision@K
+```bash
 python .\datamodel\yearly_precision_at_k_slide_numbers.py
-
+```
 Outputs
 
 outputs/yearly_precision_at_k.csv
@@ -129,9 +136,10 @@ outputs/yearly_precision_at_k.csv
 docs/slide_numbers.csv
 
 4. Local Documentation Server
+```bash
 cd .\docs\
 python -m http.server 8000
-
+```
 Open in browser:
 
 http://localhost:8000
@@ -154,4 +162,3 @@ Save
 Public URL:
 
 https://mireillehaddad.github.io/Fire-Risk-Montreal-Xgboost/
-```
