@@ -1,4 +1,7 @@
+# End to End Pipeline
+This document describes the complete data engineering and machine learning pipeline used in the Fire-Risk-Montreal-Xgboost project.
 
+The pipeline transforms raw open datasets into a building-level monthly fire risk prediction model using XGBoost.
 
 
 
@@ -50,9 +53,6 @@ flowchart TD
 
 
 
-This document describes the complete data engineering and machine learning pipeline used in the Fire-Risk-Montreal-Xgboost project.
-
-The pipeline transforms raw open datasets into a building-level monthly fire risk prediction model using XGBoost.
 
 ---
 
