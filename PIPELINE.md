@@ -22,55 +22,13 @@ python -m pip install --upgrade pip
 pip install pandas numpy matplotlib seaborn scikit-learn xgboost geopandas
 pip install notebook nbconvert
 pip install folium shapely
-
-
-# 2. Data Pipeline Overview
-```mermaid
-flowchart TD
-
-  A1["datasets/raw/uniteevaluationfonciere.csv"]
-  A2["datasets/raw/donneesouvertes-interventions-sim.csv"]
-  A3["datasets/raw/donneesouvertes-interventions-sim2020.csv"]
-  A4["datasets/cleaned/adresses.csv"]
-
-  S4["dataprep/evaluation_fonciere.py"]
-  O4["datasets/cleaned/eval_cleaned.csv"]
-
-  S5["dataprep/interventions_HAS_FIRE_binary_analysis.py"]
-  O5["datasets/cleaned/fire_events.csv"]
-
-  S6["dataprep/main_evaluation_feat_eng.py"]
-  O6["datasets/cleaned/evaluation_with_fire_and_coordinates.csv"]
-
-  S7["dataprep/dense_panel_building_month.py"]
-  O7["datasets/panel/panel_building_month.csv"]
-
-  S8["datamodel/xgboost_panel_with_feat.py"]
-  O8a["models/xgb_fire_risk_model.json"]
-  O8b["outputs/predictions_monthly.csv"]
-
-  S12["dataprep/time_model_Xgboost_forecasting_visualizations.py"]
-  O12["docs/figures/*.png"]
-
-  S13["datamodel/monthly_precision_at_k.py"]
-  S14["datamodel/yearly_precision_at_k_slide_numbers.py"]
-
-  A1 --> S4 --> O4
-  A2 --> S5 --> O5
-  A3 --> S5
-  O4 --> S6
-  A4 --> S6
-  O5 --> S6 --> O6
-  O6 --> S7 --> O7
-  O7 --> S8 --> O8a
-  O7 --> S8 --> O8b
-  O8b --> S13
-  O8b --> S14
-  O8b --> S12 --> O12
 ```
+
+
 
 3. Step-by-Step Execution
 Step 4 – Clean Evaluation Foncière
+```bash
 python .\dataprep\evaluation_fonciere.py
 
 Input
@@ -196,3 +154,4 @@ Save
 Public URL:
 
 https://mireillehaddad.github.io/Fire-Risk-Montreal-Xgboost/
+```
